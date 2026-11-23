@@ -104,7 +104,9 @@ public sealed class AppRefactorContractTests
         var root = TestRepositoryPaths.GetRepositoryRoot();
         var owner = File.ReadAllText(Path.Combine(root, "src", "OpenClaw.SetupEngine", "GatewayPackageCleanup.cs"));
         var worker = File.ReadAllText(Path.Combine(root, "src", "OpenClaw.SetupEngine", "GatewayPackageCleanup.ps1"));
-        Assert.Contains("RunAsync(commands, register, null, null, false, ct, preserve: keep)", owner);
+        Assert.Contains(
+            "RunAsync(commands, register, null, null, false, ct, preserve: keep, dataDir: dataDir)",
+            owner);
         Assert.Contains("""registration.Stderr.Contains("OPENCLAW_CLEANUP_RECEIPT_INVALID", StringComparison.Ordinal)""", owner);
         AssertInOrder(worker, "    Assert-ValidRemovalReceipt", "    $record = if", "    if ($Preserve)", "'--unregister '");
     }
