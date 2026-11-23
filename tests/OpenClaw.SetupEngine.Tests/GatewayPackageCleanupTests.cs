@@ -484,7 +484,9 @@ public sealed class GatewayPackageCleanupTests
         Assert.False(result.TimedOut);
         Assert.True(result.ExitCode == 0, result.Stderr);
         using var output = JsonDocument.Parse(File.ReadAllText(temp.Combine("observed.json")));
-        var events = output.RootElement.GetProperty("Events").EnumerateArray().Select(value => value.GetString()).ToArray();
+        var events = output.RootElement.GetProperty("Events").EnumerateArray()
+            .Select(value => value.GetString() ?? throw new InvalidOperationException("Fixture event was not a string."))
+            .ToArray();
         Assert.Equal(teardownInvoked, events.Contains("teardown"));
         if (removed)
         {
